@@ -49,7 +49,7 @@ export default function Home() {
             value={animalInput}
             onChange={(e) => setAnimalInput(e.target.value)}
           />
-          <input type="submit" value="Generate now" />
+          <input type="submit" value="Generate policy" />
         </form>
         <div className={styles.result}>{result}</div>
       </main>
