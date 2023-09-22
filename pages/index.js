@@ -3,8 +3,9 @@ import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
+  const [userQuestion, setUserQuestion] = useState("");
   const [result, setResult] = useState();
+  const [policyType, setPolicyType] = useState("car"); // default to car policy
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -14,7 +15,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({ question: userQuestion, policyType: policyType }), // send policy type
       });
 
       const data = await response.json();
@@ -23,9 +24,8 @@ export default function Home() {
       }
 
       setResult(data.result);
-      setAnimalInput("");
+      setUserQuestion("");
     } catch(error) {
-      // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
     }
@@ -34,23 +34,29 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
-        <link rel="icon" href="/dog.png" />
+        <title>Ask Your Car Policy</title>
+        <link rel="icon" href="/dog.png" /> {/* Consider changing this icon to something more relevant */}
       </Head>
 
       <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
+        <img src="/dog.png" className={styles.icon} /> {/* Consider changing this image to something more relevant */}
+        <h3>Spørg din police</h3>
+        <h4>Vælg police</h4>
         <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            name="animal"
-            placeholder="Enter an animal"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
-          />
-          <input type="submit" value="Generate policy" />
-        </form>
+        <select value={policyType} onChange={(e) => setPolicyType(e.target.value)}>
+          <option value="car">Bil</option>
+          <option value="accident">Ulykke</option>
+        </select>
+        <h4>Skriv spørgsmål</h4>
+        <input
+          type="text"
+          name="question"
+          placeholder="Skriv dit spørgsmål"
+          value={userQuestion}
+          onChange={(e) => setUserQuestion(e.target.value)}
+        />
+        <input type="submit" value="Spørg din police" />
+      </form>
         <div className={styles.result}>{result}</div>
       </main>
     </div>
