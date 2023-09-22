@@ -24,7 +24,7 @@ export default async function (req, res) {
 
   const policyContent = loadPolicy(policyType); // load the selected policy
   const messages = [
-    {role: "system", content: "Du er en hjælpsom skadebehandler hos en forsikringsvirksomhed."},
+    {role: "system", content: "Du er en hjælpsom skadebehandler hos en forsikringsvirksomhed. Du svarer KUN på spørgsmål relateret til forsikring og policer."},
     {role: "user", content: `Med udgangspunkt i følgende police: "${policyContent}", besvar følgende spørgsmål: "${question}"`}
   ];
 
