@@ -54,16 +54,16 @@ export default function Home() {
                 <option value="car">Bil</option>
                 <option value="accident">Ulykke</option>
               </Select>
-              <Text as="h4" mb="2">Skriv spørgsmål</Text>
+              <Text as="h4" mb="2">Skriv dit spørgsmål</Text>
               <Input
                 type="text"
                 name="question"
-                placeholder="Skriv dit spørgsmål"
+                placeholder="Fx: 'Dækker min forsikring X situation / Y person'"
                 value={userQuestion}
                 onChange={(e) => setUserQuestion(e.target.value)}
                 mb="4"
               />
-              <Button type="submit" colorScheme="teal">Spørg din police</Button>
+              <Button type="submit" colorScheme="teal">Stil spørgsmål</Button>
             </form>
             {isLoading && (
               <Box display="flex" justifyContent="center" alignItems="center" mt="4">
