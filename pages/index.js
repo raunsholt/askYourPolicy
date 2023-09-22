@@ -1,14 +1,17 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "./index.module.css";
+import { ChakraProvider, Box, Image, Heading, Select, Spinner, Input, Button, Text } from "@chakra-ui/react";
 
 export default function Home() {
   const [userQuestion, setUserQuestion] = useState("");
   const [result, setResult] = useState();
   const [policyType, setPolicyType] = useState("car"); // default to car policy
+  const [isLoading, setIsLoading] = useState(false);
+
 
   async function onSubmit(event) {
     event.preventDefault();
+    setIsLoading(true); // Set loading state to true when the request starts
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -25,40 +28,57 @@ export default function Home() {
 
       setResult(data.result);
       setUserQuestion("");
-    } catch(error) {
+    } catch (error) {
       console.error(error);
       alert(error.message);
+    } finally {
+      setIsLoading(false); // Set loading state to false when the request completes (either success or error)
     }
   }
 
   return (
-    <div>
-      <Head>
-        <title>Ask Your Car Policy</title>
-        <link rel="icon" href="/dog.png" /> {/* Consider changing this icon to something more relevant */}
-      </Head>
+    <ChakraProvider>
+      <Box as="div">
+        <Head>
+          <title>Spørg din police</title>
+          <link rel="icon" href="/monocle.png" /> {/* Consider changing this icon to something more relevant */}
+        </Head>
 
-      <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} /> {/* Consider changing this image to something more relevant */}
-        <h3>Spørg din police</h3>
-        <h4>Vælg police</h4>
-        <form onSubmit={onSubmit}>
-        <select value={policyType} onChange={(e) => setPolicyType(e.target.value)}>
-          <option value="car">Bil</option>
-          <option value="accident">Ulykke</option>
-        </select>
-        <h4>Skriv spørgsmål</h4>
-        <input
-          type="text"
-          name="question"
-          placeholder="Skriv dit spørgsmål"
-          value={userQuestion}
-          onChange={(e) => setUserQuestion(e.target.value)}
-        />
-        <input type="submit" value="Spørg din police" />
-      </form>
-        <div className={styles.result}>{result}</div>
-      </main>
-    </div>
+        <Box as="main" display="flex" flexDirection="column" alignItems="center" pt="4" w="100%">
+          <Box maxWidth="600px" width="100%"> {/* This is the centered content block */}
+            <Image src="/monocle.png" w="34px" mx="auto" />
+            <Heading as="h3" size="lg" my="4" textAlign="center">Spørg din police</Heading>
+            <Text as="h4" mb="2">Vælg police</Text>
+            <form onSubmit={onSubmit}>
+              <Select value={policyType} onChange={(e) => setPolicyType(e.target.value)} mb="4">
+                <option value="car">Bil</option>
+                <option value="accident">Ulykke</option>
+              </Select>
+              <Text as="h4" mb="2">Skriv spørgsmål</Text>
+              <Input
+                type="text"
+                name="question"
+                placeholder="Skriv dit spørgsmål"
+                value={userQuestion}
+                onChange={(e) => setUserQuestion(e.target.value)}
+                mb="4"
+              />
+              <Button type="submit" colorScheme="teal">Spørg din police</Button>
+            </form>
+            {isLoading && (
+              <Box display="flex" justifyContent="center" alignItems="center" mt="4">
+                <Spinner size="xl" speed="0.65s" emptyColor="gray.200" color="blue.500" />
+              </Box>
+            )}
+            {result && (
+              <Box mt="4" p="4" borderWidth="1px" borderRadius="md" bg="gray.50" w="100%">
+                <Heading as="h4" size="md" mb="2">Svar:</Heading>
+                <Text>{result}</Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Box>
+    </ChakraProvider>
   );
 }
