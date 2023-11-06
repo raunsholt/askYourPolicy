@@ -52,7 +52,7 @@ export default function Home() {
             <form onSubmit={onSubmit}>
               <Select value={policyType} onChange={(e) => setPolicyType(e.target.value)} mb="4">
                 <option value="car">Bil</option>
-                <option value="accident">Ulykke</option>
+                <option value="house">Hus</option>
               </Select>
               <Text as="h4" mb="2">Skriv dit spørgsmål</Text>
               <Input
